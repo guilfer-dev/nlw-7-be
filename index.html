@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Backend</title>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"
+        integrity="sha512-eVL5Lb9al9FzgR63gDs1MxcDS2wFu3loYAgjIH0+Hg38tCS8Ag62dwKyH+wzDb+QauDpEZjXbMn11blw8cbTJQ=="
+        crossorigin="anonymous"></script>
+    <script>
+
+        function getLastMessages() {
+            const req = new XMLHttpRequest();
+            req.responseType = 'json';
+            req.open("GET", "https://nextlevelweek7-guilfer.herokuapp.com/messages/last3", true);
+            req.send();
+            req.onload = () => {
+                const messages = req.response;
+                messages.forEach(message => printMessages(message));
+            }
+        }
+
+        getLastMessages();
+
+        function printMessages(message) {
+            const p = document.createElement('p');
+            p.appendChild(document.createTextNode(message.text));
+            document.body.appendChild(p);
+        }
+
+        const ws = io("https://nextlevelweek7-guilfer.herokuapp.com/")
+        ws.on("new-message", printMessages);
+
+    </script>
+
+</body>
+
+</html>
